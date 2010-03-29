@@ -1,6 +1,11 @@
+###
+# Copyright: Savonix Corporation
+# Author: Albert Lash
+# License: Affero General Public License v3 or later
+##
+
 module SvxBox
   module Amazoni
-
 
     def search_aaws(cat, search)
       require 'amazon/aws'
@@ -61,7 +66,5 @@ module SvxBox
       end
       return attribs
     end
-
-
   end
 end

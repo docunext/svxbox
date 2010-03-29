@@ -1,3 +1,9 @@
+###
+# Copyright: Savonix Corporation
+# Author: Albert Lash
+# License: Affero General Public License v3 or later
+##
+
 module SvxBox
   module Lexicali
 
