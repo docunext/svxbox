@@ -11,6 +11,10 @@ module SvxBox
       '<h3 id="page-title">' << string << '</h3>' << "\n\n"
     end
 
+    def mdlistlink(label,href)
+      "* [#{label}](#{href})"
+    end
+
     def url_unescape(string)
       string.tr('+', ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
         [$1.delete('%')].pack('H*')
