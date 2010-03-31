@@ -15,11 +15,6 @@ module SvxBox
       "* [#{label}](#{href})"
     end
 
-    def url_unescape(string)
-      string.tr('+', ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
-        [$1.delete('%')].pack('H*')
-      end
-    end
 
   end
 end
