@@ -19,6 +19,10 @@ module SvxBox
       "* [#{label}](#{href})"
     end
 
+    def humanize(text)
+      return text.gsub('_',' ').gsub(/\b\w/){$&.upcase}
+    end
+
 
   end
 end
