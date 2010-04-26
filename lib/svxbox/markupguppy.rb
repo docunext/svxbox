@@ -22,7 +22,16 @@ module SvxBox
     def humanize(text)
       return text.gsub('_',' ').gsub(/\b\w/){$&.upcase}
     end
+    
+    def svxbn(text)
+      return text.downcase.gsub(' ','_').gsub(/[^a-z0-9_]/,'')
+    end
 
+    def svxpn(svxprev,svxnext)
+      npkg = ''
+      npkg << "<span class=\"flrt\">[Next &#8250;](#{svxnext})</span>"
+      npkg << "[&#8249; Previous](#{svxprev})\n\n"
+    end
 
   end
 end
