@@ -23,15 +23,18 @@ module SvxBox
       return text.gsub('_',' ').gsub(/\b\w/){$&.upcase}
     end
     
-    def svxbn(text)
+    def svxbasename(text)
       return text.downcase.gsub(' ','_').gsub(/[^a-z0-9_]/,'')
     end
 
-    def svxpn(svxprev,svxnext)
+    def svxprevnext(svxprev,svxnext)
       npkg = ''
       npkg << "<span class=\"flrt\"><a href=\"#{svxnext}\">Next &#8250;</a></span>"
       npkg << "<a href=\"#{svxprev}\">&#8249; Previous</a>\n\n"
     end
+    
+    alias :svxbn :svxbasename
+    alias :svxpn :svxprevnext
 
   end
 end
