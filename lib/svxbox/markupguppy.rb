@@ -29,8 +29,8 @@ module SvxBox
 
     def svxpn(svxprev,svxnext)
       npkg = ''
-      npkg << "<span class=\"flrt\">[Next &#8250;](#{svxnext})</span>"
-      npkg << "[&#8249; Previous](#{svxprev})\n\n"
+      npkg << "<span class=\"flrt\"><a href=\"#{svxnext}\">Next &#8250;</a></span>"
+      npkg << "<a href=\"#{svxprev}\">&#8249; Previous</a>\n\n"
     end
 
   end
