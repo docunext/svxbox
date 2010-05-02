@@ -21,7 +21,7 @@ module SvxBox
       key = ENV[:AMAZON_KEY]
       id = ENV[:AMAZON_ID]
 
-      return unless (key && id) || ENV['RACK_ENV'] == 'test'
+      return unless (key && id)
 
       cat ? mycat = cat : mycat = 'Books'
       puts "aaws: #{search} #{cat}" unless ENV['RACK_ENV'] == 'production'
