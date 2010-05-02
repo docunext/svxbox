@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 class SvxBoxTest < Test::Unit::TestCase
+  setup do
+    @huh = "ok"
+  end
   context "MarkupGuppy" do
     should "goback should be callable" do
       result = goback
