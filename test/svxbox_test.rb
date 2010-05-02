@@ -10,19 +10,12 @@ class SvxBoxTest < Test::Unit::TestCase
       result.should == '<input type="button" onclick="history.go(-1);" value="Go Back" />'
     end
   end
-  
+
   context "Amazoni" do
     should "search_aaws should be callable" do
+      stub_get(%r|http://ecs\.amazonaws\.com/|, "amazon_response.xml")
       result = search_aaws('Books','Ruby Programming')
-      test = "ok"
-      test.should == "ok"
-    end
-    should "search_aaws should be callable again" do
-      result = search_aaws('Books','Ruby Programming')
-      puts result
-      test = "ok2"
-      puts test
-      assert test == "ok2"
+      assert result.include?('buy')
     end
   end
 end

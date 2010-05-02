@@ -29,9 +29,7 @@ module SvxBox
         is = Amazon::AWS::ItemSearch.new( mycat, { 'Keywords' => search, 'MerchantId' => 'Amazon' } )
         is.response_group = Amazon::AWS::ResponseGroup.new( :Small, 'Images')
         resp = req.search( is )
-        mydoc = resp.to_yaml
-        puts mydoc
-        File.open('/tmp/amazon.json', 'w') {|f| f.write(mydoc) }
+
         if resp.item_search_response[0]
           idx = 0
           item_sets = resp.item_search_response[0].items
