@@ -6,6 +6,10 @@ require 'shoulda/tasks'
 task :pushit do
   system('git commit -m "pushing" -a && git push origin master')
 end
+task :pullgit do
+  system('git pull origin master')
+end
+task :pulltest => [:pullgit, :test]
 
 begin
   require 'jeweler'
