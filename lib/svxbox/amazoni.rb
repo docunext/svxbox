@@ -20,15 +20,18 @@ module SvxBox
     def search_aaws(cat, search)
       key = ENV[:AMAZON_KEY]
       id = ENV[:AMAZON_ID]
+
       return unless key && id
       cat ? mycat = cat : mycat = 'Books'
-      puts "aaws: #{search} #{cat}" if ENV['RACK_ENV'] == 'development'
+      puts "aaws: #{search} #{cat}" unless ENV['RACK_ENV'] == 'production'
       begin
         req = Amazon::AWS::Search::Request.new(key, id, 'us', false)
         is = Amazon::AWS::ItemSearch.new( mycat, { 'Keywords' => search, 'MerchantId' => 'Amazon' } )
         is.response_group = Amazon::AWS::ResponseGroup.new( :Small, 'Images')
-        req.search( is )
-        
+        resp = req.search( is )
+        mydoc = resp.to_yaml
+        puts mydoc
+        File.open('/tmp/amazon.json', 'w') {|f| f.write(mydoc) }
         if resp.item_search_response[0]
           idx = 0
           item_sets = resp.item_search_response[0].items
@@ -65,7 +68,10 @@ module SvxBox
           end
           attribs << '</div>'
         end
-      rescue
+      rescue 
+        unless ENV['RACK_ENV'] == 'production'
+          raise $!
+        end
         attribs = ''
       end
       return attribs
