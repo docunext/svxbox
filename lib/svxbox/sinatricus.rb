@@ -12,18 +12,15 @@ module SvxBox
       redirect settings.uripfx+uri, 301
     end
 
-    def svx_debug(msg='',&block)
+    def svx_debug(msg='')
       if ENV['RACK_ENV'] == 'development'
-        output = block.nil? ? msg : block.call
-        puts output
+        puts { yield } if block_given?
+        puts msg
       end
     end
-    def svx_debug_t(msg='',&block)
-      if block
-        svx_debug { block.call }
-      else
-        svx_debug(msg)
-      end
+    def svx_debug_t(msg='')
+      svx_debug { yield } if block_given?
+      svx_debug(msg)
     end
   end
 end
