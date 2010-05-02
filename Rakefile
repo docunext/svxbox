@@ -25,9 +25,14 @@ task :buildgem do
 end
 
 task :pushgem do
-  system("gem push svxbox-#{@nv}.gem")
+  cmd = "gem1.8 push svxbox-#{@nv}.gem"
+  system(cmd)
   system('cp VERSION OLDVERSION')
-  system("svxbox-#{@nv}.gem")
+  system("rm svxbox-#{@nv}.gem")
+end
+
+task :frankup do
+  system('ssh 192.168.8.103 "sudo gem1.9.1 install svxbox"')
 end
 
 begin
