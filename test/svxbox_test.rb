@@ -18,4 +18,22 @@ class SvxBoxTest < Test::Unit::TestCase
       assert result.include?('buy')
     end
   end
+  context "Sinatricus" do
+    should "put msg when in development mode" do
+      ENV['RACK_ENV'] = 'development'
+      result = copy_stdout do
+        svx_debug('testing')
+      end
+      assert_equal "testing\n", result.string
+    end
+  end
+  context "Sinatricus" do
+    should "not put msg when in production mode" do
+      ENV['RACK_ENV'] = 'production'
+      result = copy_stdout do
+        svx_debug('testing')
+      end
+      assert_equal '', result.string
+    end
+  end
 end

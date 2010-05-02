@@ -7,19 +7,29 @@ require 'shoulda'
 require 'matchy'
 require 'mocha'
 require 'fakeweb'
+require 'stringio'
 
-require File.join(File.dirname(__FILE__), '..', 'conf.rb')
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'svxbox'
-
+ENV['RACK_ENV'] = 'test'
+ENV[:AMAZON_KEY] = ''
+ENV[:AMAZON_ID] = ''
 
 class Test::Unit::TestCase
   include SvxBox::SupaBali
   include SvxBox::Amazoni
+  include SvxBox::Sinatricus
 end
 
+
+
+def copy_stdout(&block)
+  o = StringIO.new
+  $stdout = o
+  block.call
+  o.close
+  o
+ensure
+  $stdout = STDOUT
+end
 
 FakeWeb.allow_net_connect = false
 
@@ -30,9 +40,6 @@ def fixture_file(filename)
   File.read(file_path)
 end
 
-def amazon_url(url)
-  url =~ /^http/ ? url : "http://ecs.amazonaws.com/onca/xml#{url}"
-end
 
 def stub_request(method, url, filename, status=nil)
   options = {:body => ""}
