@@ -11,21 +11,23 @@ task :pullgit do
 end
 task :pulltest => [:pullgit, :test]
 
-task :rollgem => [:versioncheck, :gemspec, :buildgem, :pushgem]
+task :testroll => [:versioncheck, :gemspec]
+task :rollgem => [:testroll, :buildgem, :pushgem]
 
 task :versioncheck do
-  @version = File.open('VERSION') {|f| f.read }
-  @version = File.open('OLDVERSION') {|f| f.read }
-  puts @version
+  @nv = File.open('VERSION') {|f| f.read }
+  @ov = File.open('OLDVERSION') {|f| f.read }
+  raise if @nv == @ov
 end
+
 task :buildgem do
-  system('rm *.gem')
   system('gem1.9.1 build svxbox.gemspec')
 end
 
 task :pushgem do
-  system('gem push svnxbox*.gem')
+  system("gem push svxbox-#{@nv}.gem")
   system('cp VERSION OLDVERSION')
+  system("svxbox-#{@nv}.gem")
 end
 
 begin
