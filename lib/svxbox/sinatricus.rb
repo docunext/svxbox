@@ -14,7 +14,8 @@ module SvxBox
 
     def svx_debug(msg='',&block)
       if ENV['RACK_ENV'] == 'development'
-        puts block.nil? ? msg : block.call
+        output = block.nil? ? msg : block.call
+        puts output
       end
     end
     def svx_debug_t(msg='',&block)
