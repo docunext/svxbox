@@ -14,12 +14,12 @@ module SvxBox
 
     def svx_debug(msg='')
       if ENV['RACK_ENV'] == 'development'
-        puts { yield } if block_given?
+        puts yield if block_given?
         puts msg
       end
     end
     def svx_debug_t(msg='')
-      svx_debug { yield } if block_given?
+      svx_debug yield if block_given?
       svx_debug(msg)
     end
   end
