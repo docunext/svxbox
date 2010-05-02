@@ -34,7 +34,7 @@ class SvxBoxTest < Test::Unit::TestCase
       end
       assert_equal "testing\n", result.string
     end
-    should "process block as debug output" do
+    should "process block as debug output via chain" do
       ENV['RACK_ENV'] = 'development'
       result = copy_stdout do
         svx_debug_t { 'testing' }
