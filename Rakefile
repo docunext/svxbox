@@ -3,6 +3,10 @@ require 'rake'
 require 'shoulda/tasks'
 
 
+task :pushit do
+  system('git commit -m "pushing" -a && git push origin master')
+end
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|

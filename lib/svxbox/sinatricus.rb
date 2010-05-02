@@ -17,5 +17,12 @@ module SvxBox
         puts block.nil? ? msg : block.call
       end
     end
+    def svx_debug_t(msg='',&block)
+      if block
+        svx_debug { block.call }
+      else
+        svx_debug(msg)
+      end
+    end
   end
 end
