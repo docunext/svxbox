@@ -4,6 +4,9 @@
 # License: Affero General Public License v3 or later
 ##
 
+require 'amazon/aws'
+require 'amazon/aws/search'
+
 module SvxBox
   module Amazoni
 
@@ -15,8 +18,6 @@ module SvxBox
     end
 
     def search_aaws(cat, search)
-      require 'amazon/aws'
-      require 'amazon/aws/search'
       key = ENV[:AMAZON_KEY]
       id = ENV[:AMAZON_ID]
       return unless key && id
@@ -26,7 +27,8 @@ module SvxBox
         req = Amazon::AWS::Search::Request.new(key, id, 'us', false)
         is = Amazon::AWS::ItemSearch.new( mycat, { 'Keywords' => search, 'MerchantId' => 'Amazon' } )
         is.response_group = Amazon::AWS::ResponseGroup.new( :Small, 'Images')
-        resp = req.search( is )
+        req.search( is )
+        
         if resp.item_search_response[0]
           idx = 0
           item_sets = resp.item_search_response[0].items
@@ -54,13 +56,8 @@ module SvxBox
                 attribs << '</a><br />'
 
                 if item.item_attributes[0].author
-                  attribs << ' by '
-                  item.item_attributes[0].author.each do |authors|
-                    attribs << authors.to_s
-                    unless authors == item.item_attributes[0].author.last
-                      attribs << ", "
-                    end
-                  end
+                  authors = item.item_attributes[0].author.map { |author| author.to_s }
+                  attribs << ' by ' << authors.join(", ")
                 end
                 attribs << '</div>'
               end

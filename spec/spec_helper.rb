@@ -11,4 +11,5 @@ require 'svxbox'
 
 class Test::Unit::TestCase
   include SvxBox::SupaBali
+  include SvxBox::Amazoni
 end
