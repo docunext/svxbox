@@ -15,7 +15,10 @@ module SvxBox
     def svxwc(wstring)
       return if wstring.nil?
       h = Hash.new(0)
-      wstring.downcase!.gsub!(%q{'s },' ').gsub!(/[^a-z0-9\-_\ \n\t]/,'').gsub!(/\ [0-9]+\ /,' ')
+      wstring.downcase!
+      wstring.gsub!(%q{'s },' ')
+      wstring.gsub!(/[^a-z0-9\-_\ \n\t]/,'')
+      wstring.gsub!(/\ [0-9]+\ /,' ')
       warr = wstring.split
       warr.delete_if { |w| ! ((3..14).to_a.include?(w.size)) || STOPWORDS.include?(w) || w.include?('&') }
       warr.each do |w|
