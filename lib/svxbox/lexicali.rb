@@ -28,8 +28,8 @@ module SvxBox
         end
       end
       hh = h.delete_if {|key, value| value < 2 }
-      hh.sort {|a,b| b[1]<=>a[1]}
-      svx_debug (hh)
+      hh.sort! {|a,b| b[1]<=>a[1]}
+      svx_debug(hh)
       if hh.size > 0
         return hh[0..1].map{ |key| key[0] }.join(' ')
       end
