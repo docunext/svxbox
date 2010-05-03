@@ -28,11 +28,11 @@ module SvxBox
         end
       end
       hh = h.delete_if {|key, value| value < 2 }
+      hh.sort {|a,b| b[1]<=>a[1]}
 
-      if relkeys.size > 0
-        return relkeys[0..1].map{ |key| key[0] }.join(' ')
+      if hh.size > 0
+        return hh[0..1].map{ |key| key[0] }.join(' ')
       end
-
       return false
     end
 
