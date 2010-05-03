@@ -23,7 +23,7 @@ module SvxBox
       warr.delete_if { |w| ! ((3..14).to_a.include?(w.size)) || STOPWORDS.include?(w) || w.include?('&') }
       warr.each do |w|
         if w[-1] == 's'
-          w.delete_at[-1] if warr.include?(w[0..-1])
+          w.chop! if warr.include?(w[0..-1])
         end
         h[w] += 1
       end
