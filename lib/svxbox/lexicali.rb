@@ -13,18 +13,27 @@ module SvxBox
     # given a string, it create a hash of each word and the number of times
     # each word occurs in the text
     def svxwc(wstring)
+      return if wstring.nil?
       h = Hash.new(0)
       wstring.split.each do |w|
-        w.downcase!
-        w.gsub!(/[\.,\+\ \?\(\)\"\'#\/;\{\}\|\*\-]/,'')
-        if w
-          unless w.size < 3 || w.size > 12 || STOPWORDS.include?(w) || w.include?('&')
-            h[w] += 1
+        next if w.size < 2
+        if w.is_a?(String)
+          w.downcase!
+          w.gsub!(/[\.,\+\ \?\(\)\"\'#\/;\{\}\|\*\-]/,'')
+          if w
+            unless w.size < 3 || w.size > 12 || STOPWORDS.include?(w) || w.include?('&')
+              h[w] += 1
+            end
           end
         end
       end
       hh = h.delete_if {|key, value| value < 2 }
-      return hh.sort {|a,b| b[1]<=>a[1]}
+
+      if relkeys.size > 0
+        return relkeys[0..1].map{ |key| key[0] }.join(' ')
+      end
+
+      return false
     end
 
   end

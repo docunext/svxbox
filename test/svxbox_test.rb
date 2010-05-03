@@ -18,6 +18,13 @@ class SvxBoxTest < Test::Unit::TestCase
       assert result.include?('buy')
     end
   end
+  context "Lexicali" do
+    should "search_aaws return a simple array" do
+      sample_text = fixture_file('sample_text.txt')
+      search = svxwc(sample_text)
+      assert_equal search, "application applications"
+    end
+  end
   context "Sinatricus" do
     should "put msg when in development mode" do
       ENV['RACK_ENV'] = 'development'
