@@ -15,8 +15,8 @@ task :testroll => [:versioncheck, :gemspec]
 task :rollgem => [:testroll, :buildgem, :pushgem]
 
 task :versioncheck do
-  @nv = File.open('VERSION') {|f| f.read }
-  @ov = File.open('OLDVERSION') {|f| f.read }
+  @nv = File.open('VERSION') {|f| f.read }.chop
+  @ov = File.open('OLDVERSION') {|f| f.read }.chop
   raise if @nv == @ov
 end
 
@@ -25,11 +25,16 @@ task :buildgem do
 end
 
 task :pushgem do
-  cmd = "gem1.8 push svxbox-#{@nv}.gem"
+  cmd = 'gem1.8 push svxbox-' << @nv + '.gem'
+  system(cmd)
+  cmd = 'sudo gem1.9.1 install svxbox-' << @nv + '.gem'
   system(cmd)
   system('cp VERSION OLDVERSION')
-  system("rm svxbox-#{@nv}.gem")
+  cmd = 'rm svxbox-' << @nv + '.gem'
+  system(cmd)
 end
+
+task :pushgem => [:versioncheck]
 
 task :frankup do
   system('ssh 192.168.8.103 "sudo gem1.9.1 install svxbox"')
