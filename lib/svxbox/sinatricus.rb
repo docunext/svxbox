@@ -13,7 +13,7 @@ module SvxBox
     end
 
     def svx_debug(msg=nil)
-      if ENV['RACK_ENV'] == 'development'
+      unless ENV['RACK_ENV'] == 'production'
         puts msg unless msg.nil?
         puts yield if block_given?
       end
