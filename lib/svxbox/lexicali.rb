@@ -15,21 +15,18 @@ module SvxBox
     def svxwc(wstring)
       return if wstring.nil?
       h = Hash.new(0)
-      wstring.split.each do |w|
-        next if w.size < 2
-        if w.is_a?(String)
-          w.downcase!
-          w.gsub!(/[\.,\+\ \?\(\)\"\'#\/;\{\}\|\*\-]/,'')
-          if w
-            unless w.size < 3 || w.size > 12 || STOPWORDS.include?(w) || w.include?('&')
-              h[w] += 1
-            end
-          end
+      wstring.downcase!.gsub!(%q{'s },' ').gsub!(/[^a-z0-9\-_\s]/,'').gsub!(/\ [0-9]+\ /,' ')
+      warr = wstring.split
+      warr.delete_if { |w| ! ((3..14).to_a.include?(w.size)) || STOPWORDS.include?(w) || w.include?('&') }
+      warr.each do |w|
+        if w[-1] == 's'
+          w.delete_at[-1] if warr.include?(w[0..-1])
         end
+        h[w] += 1
       end
       hh = h.delete_if {|key, value| value < 2 }
       relkeys = hh.sort {|a,b| b[1]<=>a[1]}
-      svx_debug(relkeys)
+      
       if relkeys.size > 0
         return relkeys[0..1].map{ |key| key[0] }.join(' ')
       end
