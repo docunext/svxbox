@@ -9,8 +9,8 @@ module SvxBox
 
     def make_oid(oid)
       begin
-        obj = Mongo::ObjectID.from_string(oid)
-      rescue Mongo::InvalidObjectID
+        obj = BSON::ObjectId.from_string(oid)
+      rescue
         halt 404
       end
     end

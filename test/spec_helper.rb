@@ -10,8 +10,8 @@ require 'fakeweb'
 require 'stringio'
 
 ENV['RACK_ENV'] = 'test'
-ENV[:AMAZON_KEY] = ''
-ENV[:AMAZON_ID] = ''
+ENV['AMAZON_KEY'] = ''
+ENV['AMAZON_ID'] = ''
 
 class Test::Unit::TestCase
   include SvxBox::SupaBali
