@@ -12,7 +12,7 @@ module SvxBox
     # Svx Word Count
     # given a string, it create a hash of each word and the number of times
     # each word occurs in the text
-    def svxwc(wstring)
+    def svxwc(wstring, terms=1)
       return if wstring.nil?
       h = Hash.new(0)
       wstring.downcase!
@@ -29,9 +29,13 @@ module SvxBox
       end
       hh = h.delete_if {|key, value| value < 2 }
       relkeys = hh.sort {|a,b| b[1]<=>a[1]}
+      if terms == 1
+        return relkeys.first[0]
+      end
       
       if relkeys.size > 0
-        return relkeys[0..1].map{ |key| key[0] }.join(' ')
+        max = (relkeys.size < terms ? relkeys.size : terms) - 1
+        return relkeys[0..max].map{ |key| key[0] }.join(' ')
       end
       return false
     end

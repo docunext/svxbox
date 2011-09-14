@@ -21,7 +21,7 @@ class SvxBoxTest < Test::Unit::TestCase
   context "Lexicali" do
     should "search_aaws return a simple array" do
       sample_text = fixture_file('sample_text.txt')
-      search = svxwc(sample_text)
+      search = svxwc(sample_text, 2)
       assert_equal search, "application video"
     end
   end

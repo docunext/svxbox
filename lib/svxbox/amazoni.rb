@@ -18,8 +18,8 @@ module SvxBox
     end
 
     def search_aaws(cat, search)
-      key = ENV[:AMAZON_KEY]
-      id = ENV[:AMAZON_ID]
+      key = ENV['AMAZON_KEY']
+      id = ENV['AMAZON_ID']
 
       return unless (key && id)
 
