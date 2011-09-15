@@ -13,7 +13,7 @@ module SvxBox
     # given a string, it create a hash of each word and the number of times
     # each word occurs in the text
     def svxwc(wstring, terms=1)
-      return if wstring.nil?
+      return unless wstring.is_a?(String) 
       h = Hash.new(0)
       wstring.downcase!
       wstring.gsub!(%q{'s },' ')
