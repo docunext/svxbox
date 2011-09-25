@@ -24,17 +24,17 @@ module SvxBox
         c.tag = ENV['AMAZON_TAG']
       end
 
-      puts "aaws: #{search} #{cat}" unless ENV['RACK_ENV'] == 'production'
+      puts "aaws: #{search} #{cat}" if ENV['RACK_ENV'] == 'development'
 
       req << {:search_index => 'Books', :operation => 'ItemSearch', :response_group => ['Small','Images'],             :keywords  => search, :total_results => 5 }
       #req.search(search)
       resp = req.get
-      puts resp.to_hash.to_yaml
+      puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
 
-      puts resp.errors.inspect
+      puts resp.errors.inspect if ENV['RACK_ENV'] == 'development'
       if resp.valid?
         attribs = '<div>'
-        puts resp.to_hash.to_yaml
+        puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
         i = 0 
         resp.each('Item') do |item|
           i = i + 1

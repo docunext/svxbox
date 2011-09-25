@@ -1,0 +1,5 @@
+bundler_args: --local --path=vendor
+gemfile: Gemfile
+script: "bundle exec rake test"
+rvm:
+  - 1.9.2
