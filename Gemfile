@@ -1,3 +1,6 @@
+source :rubygems
+
+
 gem 'nokogiri'
 gem 'amazon_product'
 gem 'rake'
