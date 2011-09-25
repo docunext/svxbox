@@ -1,5 +1,4 @@
-source :rubygems
-
+source :gemcutter
 
 gem 'nokogiri'
 gem 'amazon_product'

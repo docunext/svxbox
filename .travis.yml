@@ -1,4 +1,4 @@
-bundler_args: --local --path=vendor
+bundler_args: --path=vendor
 gemfile: Gemfile
 script: "bundle exec rake test"
 rvm:
