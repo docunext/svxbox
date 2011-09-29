@@ -4,12 +4,10 @@
 # License: Affero General Public License v3 or later
 ##
 
-require 'amazon/aws'
-require 'amazon/aws/search'
+require "amazon_product"
 
 module SvxBox
   module Amazoni
-
     # From Rack::Utils / Camping
     def url_unescape(string)
       string.tr('+', ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
@@ -18,62 +16,60 @@ module SvxBox
     end
 
     def search_aaws(cat, search)
-      key = ENV['AMAZON_KEY']
-      id = ENV['AMAZON_ID']
+      req = AmazonProduct["us"]
 
-      return unless (key && id)
+      req.configure do |c|
+        c.key = ENV['AMAZON_KEY']
+        c.secret = ENV['AMAZON_SECRET']
+        c.tag = ENV['AMAZON_TAG']
+      end
 
-      cat ? mycat = cat : mycat = 'Books'
-      puts "aaws: #{search} #{cat}" unless ENV['RACK_ENV'] == 'production'
-      begin
-        req = Amazon::AWS::Search::Request.new(key, id, 'us', false)
-        is = Amazon::AWS::ItemSearch.new( mycat, { 'Keywords' => search, 'MerchantId' => 'Amazon' } )
-        is.response_group = Amazon::AWS::ResponseGroup.new( :Small, 'Images')
-        resp = req.search( is )
+      puts "aaws: #{search} #{cat}" if ENV['RACK_ENV'] == 'development'
 
-        if resp.item_search_response[0]
-          idx = 0
-          item_sets = resp.item_search_response[0].items
-          attribs = '<div>'
-          item_sets.each do |item_set|
+      req << {:search_index => 'Books', :operation => 'ItemSearch', :response_group => ['Small','Images'],             :keywords  => search, :total_results => 5 }
+      #req.search(search)
+      resp = req.get
+      puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
+
+      puts resp.errors.inspect if ENV['RACK_ENV'] == 'development'
+      if resp.valid?
+        attribs = '<div>'
+        puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
+        i = 0 
+        resp.each('Item') do |item|
+          i = i + 1
+          unless i > 4
             mfr = Array.new
-            item_set.item[0..6].each do |item|
-              imfr = item.item_attributes[0].manufacturer
-              unless mfr.include?(imfr) || idx > 3
-                mfr << imfr
-                idx = idx + 1
-                iurl = url_unescape(item.item_links[0].item_link[0].url.to_s).gsub('&','&amp;')
-                link = '<a rel="nofollow" href="' << iurl << '">'
-                attribs << '<div style="margin-bottom:1em;" class="clearadiv">'
-                if item.small_image
-                  attribs << '<div class="flrt" style="clear:left;"><center>'+link+'<img alt="'+search+'" src="'+item.small_image[0].url+'"/></a><br />'
-                  if item.large_image
-                    attribs << '<a class="thickbox" href="'+item.large_image[0].url+'">zoom</a> / '
-                  end
-                  attribs << '<a href="'+iurl+'">buy</a></center>'
-                  attribs << '</div>'
+            imfr = item['Manufacturer']
+            unless mfr.include?(imfr)
+              mfr << imfr
+              iurl = url_unescape(item['ItemLinks']['ItemLink'][0]["URL"].to_s)
+              link = '<a rel="nofollow" href="' << iurl << '">'
+              attribs << '<div style="margin-bottom:1em;" class="clearadiv">'
+              if item['SmallImage']
+                attribs << '<div class="flrt" style="clear:left;"><center>'+link+'<img alt="'+search+'" src="'+item['SmallImage']['URL']+'"/></a><br />'
+                if item['LargeImage']
+                  attribs << '<a class="thickbox" href="'+item['LargeImage']['URL']+'">zoom</a> / '
                 end
-                attribs << link
-                attribs << item.item_attributes[0].title
-                attribs << '</a><br />'
-
-                if item.item_attributes[0].author
-                  authors = item.item_attributes[0].author.map { |author| author.to_s }
-                  attribs << ' by ' << authors.join(", ")
-                end
+                attribs << '<a href="'+iurl+'">buy</a></center>'
                 attribs << '</div>'
               end
+              attribs << link
+              attribs << item['ItemAttributes']['Title']
+              attribs << '</a><br />'
+
+              if item['ItemAttributes']['Author']
+                author = item['ItemAttributes']['Author']
+                authors = author.is_a?(Array) ? author.map { |author| author.to_s } : [author]
+                attribs << ' by ' << authors.join(", ")
+              end
+              attribs << '</div>'
             end
           end
-          attribs << '</div>'
         end
-        return attribs
-      rescue
-        unless ENV['RACK_ENV'] == 'production'
-          raise $!
-        end
-        ''
+        attribs << '</div>'
       end
+      return attribs.gsub('&','&amp;')
     end
   end
 end

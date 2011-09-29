@@ -1,0 +1,8 @@
+These are some generic utility wrappers I use. They might not be useful to
+others, but possibly.
+
+I plan to keep maintaining them, at least.
+
+The license is the Affero GPL v3.
+
+[Docunext](http://www.docunext.com/)

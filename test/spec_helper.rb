@@ -11,7 +11,8 @@ require 'stringio'
 
 ENV['RACK_ENV'] = 'test'
 ENV['AMAZON_KEY'] = ''
-ENV['AMAZON_ID'] = ''
+ENV['AMAZON_TAG'] = ''
+ENV['AMAZON_SECRET'] = ''
 
 class Test::Unit::TestCase
   include SvxBox::SupaBali
