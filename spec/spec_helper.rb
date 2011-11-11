@@ -1,46 +1,24 @@
 require File.join(File.dirname(__FILE__), '..', 'lib/svxbox.rb')
 
-require 'test/unit'
-require 'pathname'
+require 'rspec'
+require 'rspec-expectations'
 
 require 'shoulda'
 require 'matchy'
-require 'mocha'
 require 'fakeweb'
-require 'stringio'
 
 ENV['RACK_ENV'] = 'test'
 ENV['AMAZON_KEY'] = ''
 ENV['AMAZON_TAG'] = ''
 ENV['AMAZON_SECRET'] = ''
 
-class Test::Unit::TestCase
-  include SvxBox::SupaBali
-  include SvxBox::Amazoni
-  include SvxBox::Sinatricus
-end
-
-
-
-def copy_stdout(&block)
-  o = StringIO.new
-  $stdout = o
-  block.call
-  o.close
-  o
-ensure
-  $stdout = STDOUT
-end
-
 FakeWeb.allow_net_connect = false
-
 
 def fixture_file(filename)
   return '' if filename == ''
   file_path = File.expand_path(File.dirname(__FILE__) + '/fixtures/' + filename)
   File.read(file_path)
 end
-
 
 def stub_request(method, url, filename, status=nil)
   options = {:body => ""}

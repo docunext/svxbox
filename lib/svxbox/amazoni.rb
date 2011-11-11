@@ -28,6 +28,42 @@ module SvxBox
 
       req.search(cat, :operation => 'ItemSearch', :response_group => ['Small','Images'], :keywords => search, :total_results => 5 )
     end
+
+    def new_search_aaws(cat, search)
+      resp = get_response(cat, search)
+      if resp.valid?
+        products = []
+        i = 0 
+        resp.each('Item') do |item|
+          i = i + 1
+          unless i > 4
+            mfr = Array.new
+            imfr = item['Manufacturer']
+            product = {}
+            unless mfr.include?(imfr)
+              mfr << imfr
+              product[:url] = url_unescape(item['ItemLinks']['ItemLink'][0]["URL"].to_s).force_encoding('UTF-8')
+              if item['SmallImage']
+                product[:small_image] = item['SmallImage']['URL']
+                if item['LargeImage']
+                  product[:large_image] = item['LargeImage']['URL']
+                end
+              end
+              product[:title] = item['ItemAttributes']['Title']
+
+              if item['ItemAttributes']['Author']
+                author = item['ItemAttributes']['Author']
+                authors = author.is_a?(Array) ? author.map { |author| author.to_s } : [author]
+                product[:authors] = authors.join(", ")
+              end
+            end
+          end
+          products << product
+        end
+      end
+
+    end
+
     def search_aaws(cat, search)
 
       resp = get_response(cat, search)
