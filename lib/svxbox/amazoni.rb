@@ -56,10 +56,12 @@ module SvxBox
                 authors = author.is_a?(Array) ? author.map { |author| author.to_s } : [author]
                 product[:authors] = authors.join(", ")
               end
+
+              products << product
             end
           end
-          products << product
         end
+        products
       end
 
     end
