@@ -15,7 +15,7 @@ module SvxBox
       end
     end
 
-    def search_aaws(cat, search)
+    def get_response(cat, search)
       req = AmazonProduct["us"]
 
       req.configure do |c|
@@ -26,12 +26,15 @@ module SvxBox
 
       puts "aaws: #{search} #{cat}" if ENV['RACK_ENV'] == 'development'
 
-      req << {:search_index => 'Books', :operation => 'ItemSearch', :response_group => ['Small','Images'],             :keywords  => search, :total_results => 5 }
-      #req.search(search)
-      resp = req.get
-      puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
+      req.search(cat, :operation => 'ItemSearch', :response_group => ['Small','Images'], :keywords => search, :total_results => 5 )
+    end
+    def search_aaws(cat, search)
 
-      puts resp.errors.inspect if ENV['RACK_ENV'] == 'development'
+      resp = get_response(cat, search)
+
+      #puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
+
+      #puts resp.errors.inspect if ENV['RACK_ENV'] == 'development'
       if resp.valid?
         attribs = '<div>'
         puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
@@ -43,17 +46,19 @@ module SvxBox
             imfr = item['Manufacturer']
             unless mfr.include?(imfr)
               mfr << imfr
-              iurl = url_unescape(item['ItemLinks']['ItemLink'][0]["URL"].to_s)
-              link = '<a rel="nofollow" href="' << iurl << '">'
+              iurl = url_unescape(item['ItemLinks']['ItemLink'][0]["URL"].to_s).force_encoding('UTF-8')
+              link = "<a rel='nofollow' href='#{iurl}'>"
               attribs << '<div style="margin-bottom:1em;" class="clearadiv">'
               if item['SmallImage']
-                attribs << '<div class="flrt" style="clear:left;"><center>'+link+'<img alt="'+search+'" src="'+item['SmallImage']['URL']+'"/></a><br />'
+                attribs << %Q{<div class="flrt" style="clear:left;">#{link}<img alt="#{search}" src="#{item['SmallImage']['URL']}"/></a><br />'}
                 if item['LargeImage']
-                  attribs << '<a class="thickbox" href="'+item['LargeImage']['URL']+'">zoom</a> / '
+                  attribs << %Q{<a class="thickbox" href="#{item['LargeImage']['URL']}">zoom</a> / }
                 end
-                attribs << '<a href="'+iurl+'">buy</a></center>'
+                attribs << "<a href='#{iurl}'>buy</a>"
                 attribs << '</div>'
               end
+              puts attribs
+              puts attribs.encoding.name
               attribs << link
               attribs << item['ItemAttributes']['Title']
               attribs << '</a><br />'
