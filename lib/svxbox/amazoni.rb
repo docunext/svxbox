@@ -70,9 +70,6 @@ module SvxBox
 
       resp = get_response(cat, search)
 
-      #puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
-
-      #puts resp.errors.inspect if ENV['RACK_ENV'] == 'development'
       if resp.valid?
         attribs = '<div>'
         puts resp.to_hash.to_yaml if ENV['RACK_ENV'] == 'development'
