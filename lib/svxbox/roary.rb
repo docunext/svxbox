@@ -31,5 +31,8 @@ module SvxBox::Roary
     def per_page
       10
     end
+    def paginates_per 
+      self.per_page
+    end
   end
 end
