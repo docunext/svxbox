@@ -4,7 +4,8 @@ module Rack
     
     def initialize(app, options = {})
       @app, @options = app, DEFAULTS.merge(options)
-      @redis = Redis.new @options[:redis]
+      @redis = Redis.new @options[:redis] if @options[:redis].is_a?(Hash)
+      @redis = @options[:redis] if @options[:redis].is_a?(Redis)
     end
     
     # Add like this: r.sadd('rackout','192.168.254.1')

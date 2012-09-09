@@ -4,6 +4,7 @@ module SvxBox::Roary
   included do
     cattr_accessor :param_suffix
     before_validation :ensure_param_key_has_value, :if => :param_key_attribute?
+    validates :param_key, :presence => true, :uniqueness => true, :if => :param_key_attribute?
   end
 
   def to_param_with_suffix
@@ -28,7 +29,7 @@ module SvxBox::Roary
   private
 
   def ensure_param_key_has_value
-    return unless self.param_key.nil?
+    return unless self.param_key.nil? || self.param_key.empty?
     self.param_key = Time.now.to_i.to_s
   end
 
