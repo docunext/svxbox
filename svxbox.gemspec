@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
     "lib/svxbox/roary.rb",
     "spec/fixtures/amazon_response.xml",
     "spec/fixtures/sample_text.txt",
-    "spec/spec.opts",
     "spec/spec_helper.rb",
     "spec/svxbox_spec.rb"
   ]
