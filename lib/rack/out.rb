@@ -13,7 +13,7 @@ module Rack
     def call(env)
 
       begin      
-        if @redis.sismember @options[:key], env["REMOTE_ADDR"]
+        if @redis.sismember @options[:key], request.ip.to_s
           http_error(403)
         else
           @app.call env
