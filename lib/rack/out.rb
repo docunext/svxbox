@@ -11,6 +11,7 @@ module Rack
     # Add like this: r.sadd('rackout','192.168.254.1')
     #
     def call(env)
+      request = Rack::Request.new(env)
 
       begin      
         if @redis.sismember @options[:key], request.ip.to_s
@@ -18,8 +19,8 @@ module Rack
         else
           @app.call env
         end
-      rescue Errno::ECONNREFUSED
-      rescue Errno::EACCES
+      rescue 
+        @app.call env
       end
       
     end
