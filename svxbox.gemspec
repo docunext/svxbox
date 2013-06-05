@@ -36,4 +36,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency(%q<amazon_product>, [">= 0"])
   s.add_development_dependency(%q<rspec>, [">= 2"])
+  s.add_development_dependency('rake')
+  s.add_development_dependency('shoulda')
+  s.add_development_dependency('fakeweb')
 end

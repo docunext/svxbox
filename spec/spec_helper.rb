@@ -4,7 +4,7 @@ require 'rspec'
 require 'rspec-expectations'
 
 require 'shoulda'
-require 'matchy'
+#require 'matchy'
 require 'fakeweb'
 
 ENV['RACK_ENV'] = 'test'
