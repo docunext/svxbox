@@ -1,4 +1,11 @@
 module SvxBox::Roary
+
+  # Overrides the ActiveRecord::Base#find method to find by a speficied param.
+  #
+  #   class Something < ActiveRecord::Base
+  #     include SvxBox::Roary
+  #     to_param_suffix :name
+  #   end
   extend ActiveSupport::Concern
 
   included do
@@ -7,38 +14,6 @@ module SvxBox::Roary
     validates :param_key, :presence => true, :uniqueness => true, :if => :param_key_attribute?
   end
 
-  def to_param_with_suffix
-    # The aliased to_param method
-    if param_suffix && self.respond_to?(param_suffix)
-      suffix = self.send(param_suffix).parameterize
-      return "#{to_param_without_suffix}-#{suffix}"
-    else
-      return to_param_without_suffix  
-    end
-  end
-
-  def to_param
-    return self.param_key if param_key_attribute?
-    super
-  end
-
-  def param_key_attribute?
-    self.class.attribute_method?(:param_key)
-  end
-
-  private
-
-  def ensure_param_key_has_value
-    return unless self.param_key.nil? || self.param_key.empty?
-    self.param_key = Time.now.to_i.to_s
-  end
-
-
-  #   class Something < ActiveRecord::Base
-  #     include SvxBox::Roary
-  #     to_param_suffix :name
-  #
-  #   end
   module ClassMethods
     def updated_at
       last_updated.updated_at
@@ -77,10 +52,32 @@ module SvxBox::Roary
         super
       end
     end
-
-
-        
-
-
   end
+
+  def to_param_with_suffix
+    # The aliased to_param method
+    if param_suffix && self.respond_to?(param_suffix)
+      suffix = self.send(param_suffix).parameterize
+      return "#{to_param_without_suffix}-#{suffix}"
+    else
+      return to_param_without_suffix  
+    end
+  end
+
+  def to_param
+    return self.param_key if param_key_attribute?
+    super
+  end
+
+  def param_key_attribute?
+    self.class.attribute_method?(:param_key)
+  end
+
+  private
+
+  def ensure_param_key_has_value
+    return unless self.param_key.nil? || self.param_key.empty?
+    self.param_key = Time.now.to_i.to_s
+  end
+
 end
